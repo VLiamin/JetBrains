@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectingStamps", "CollectingStamps\CollectingStamps.csproj", "{B91F5254-0314-4125-98EA-135214B109FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateOfStamps", "StateOfStamps\StateOfStamps.csproj", "{6CBBCA2B-5021-466F-A1DC-F93F7E2AE1C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B91F5254-0314-4125-98EA-135214B109FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91F5254-0314-4125-98EA-135214B109FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91F5254-0314-4125-98EA-135214B109FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91F5254-0314-4125-98EA-135214B109FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CBBCA2B-5021-466F-A1DC-F93F7E2AE1C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CBBCA2B-5021-466F-A1DC-F93F7E2AE1C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CBBCA2B-5021-466F-A1DC-F93F7E2AE1C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CBBCA2B-5021-466F-A1DC-F93F7E2AE1C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {87AB640F-DD92-4C4D-914D-112F09593563}
+	EndGlobalSection
+EndGlobal
