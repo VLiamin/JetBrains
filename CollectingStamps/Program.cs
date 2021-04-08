@@ -41,7 +41,7 @@ namespace CollectingStamps
             };
             Department department3 = new Department
             {
-                Identificator = 5,
+                Identificator = 3,
                 IsBegin = false,
                 IsEnd = true,
                 IsConditionalRule = false,
@@ -60,7 +60,7 @@ namespace CollectingStamps
                 int[] array = list.ToArray();
                 for (int i = 0; i < array.Length; i++)
                 {
-                    Console.Write(array[i]);
+                    Console.Write(array[i] + " ");
                 }
                 Console.WriteLine();
             }

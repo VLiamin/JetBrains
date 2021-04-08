@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using StateOfStamps;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace StateOfStampsTests
 {
@@ -266,6 +267,75 @@ namespace StateOfStampsTests
             stamps.Add(3);
             listOfStamps.Add(stamps);
             Assert.AreEqual(work.GetStamps(departments, 3), listOfStamps);
+
+        }
+
+        /// <summary>
+        /// Test showing the correctness of work with multithreading
+        /// </summary>
+        [Test]
+        public void GetStampsTest6()
+        {
+            Department department1 = new Department
+            {
+                Identificator = 1,
+                IsBegin = true,
+                IsEnd = false,
+                IsConditionalRule = false,
+                FirstStamp = 1,
+                FirstStampCrossed = 3,
+                Counter = 0,
+                FirstNextDepartmentIdentificator = 2
+            };
+            Department department2 = new Department
+            {
+                Identificator = 2,
+                IsBegin = false,
+                IsEnd = false,
+                IsConditionalRule = false,
+                FirstStamp = 2,
+                FirstStampCrossed = 3,
+                Counter = 0,
+                FirstNextDepartmentIdentificator = 3
+            };
+            Department department3 = new Department
+            {
+                Identificator = 3,
+                IsBegin = false,
+                IsEnd = true,
+                IsConditionalRule = false,
+                FirstStamp = 3,
+                FirstStampCrossed = 2,
+                Counter = 0,
+                FirstNextDepartmentIdentificator = 3
+            };
+
+            Department[] departments = { department1, department2, department3 };
+
+            List<List<int>> listOfStamps = new List<List<int>>();
+            List<int> stamps = new List<int>();
+            stamps.Add(1);
+            stamps.Add(3);
+            listOfStamps.Add(stamps);
+
+            var threads = new List<Thread>();
+
+            for (var i = 0; i < 100; i++)
+            {
+                threads.Add(new Thread(() =>
+                {
+                    Assert.AreEqual(work.GetStamps(departments, 3), listOfStamps);
+                }));
+            }
+            foreach (var thread in threads)
+            {
+                thread.Start();
+            }
+
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
 
         }
     }

@@ -31,7 +31,6 @@ namespace StateOfStamps
             List<List<int>> resultsStamps = new List<List<int>>();
             int i = 1;
             var previousConditions = new Dictionary<int, List<List<int>>>();
-            int temp = 1;
             bool flag = true;
 
             while (flag)
@@ -41,7 +40,7 @@ namespace StateOfStamps
                     flag = false;
                 }
 
-                temp = i;
+                int temp = i;
                 departments[i - 1].Counter = departments[i - 1].Counter + 1;
 
                 if (!departments[i - 1].IsConditionalRule)
