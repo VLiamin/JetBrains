@@ -40,8 +40,10 @@ namespace StateOfStamps
                 {
                     flag = false;
                 }
+
                 temp = i;
                 departments[i - 1].Counter = departments[i - 1].Counter + 1;
+
                 if (!departments[i - 1].IsConditionalRule)
                 {
                     Stamps.Remove(departments[i - 1].FirstStampCrossed);
@@ -55,7 +57,7 @@ namespace StateOfStamps
                     
                     if (Stamps.Contains(departments[i - 1].Conditional))
                     {
-                        Console.WriteLine("fjfjfj");
+
                         Stamps.Remove(departments[i - 1].FirstStampCrossed);
                         if (!Stamps.Contains(departments[i - 1].FirstStamp))
                         {
@@ -101,6 +103,7 @@ namespace StateOfStamps
                             copyList.Add(x);
                         }
                         list.Add(copyList);
+
                     } else
                     {
                         List<List<int>> list = new List<List<int>>();
