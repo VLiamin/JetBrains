@@ -3,18 +3,32 @@ using System.Collections.Generic;
 
 namespace StateOfStamps
 {
+
+    /// <summary>
+    /// Class that returns a list of strikethrough seals
+    /// </summary>
     public class Work
     {
 
-        private int NumberOfDepartments;
-        private int NumberOfStamps;
-        private Department[] Departments;
-        List<int> Stamps = new List<int>();
-        
+        private List<int> Stamps = new List<int>();
 
-        public void GetStamps(Department[] Departments, int identificator)
+        /// <summary>
+        /// Method that returns a list of strikethrough seals
+        /// </summary>
+        /// <param name="departments">
+        /// Array of departments filled with information about them
+        /// </param>
+        /// <param name="identificator">
+        /// Department number monitored by the method
+        /// </param>
+        /// <returns>
+        /// A list of seals after passing through the department of the interested user
+        /// </returns>
+        public List<List<int>> GetStamps(Department[] departments, int identificator)
         {
-           
+            sort(departments);
+
+            List<List<int>> resultsStamps = new List<List<int>>();
             int i = 1;
             var previousConditions = new Dictionary<int, List<List<int>>>();
             int temp = 1;
@@ -22,56 +36,61 @@ namespace StateOfStamps
 
             while (flag)
             {
-                if (Departments[i - 1].isEnd)
+                if (departments[i - 1].IsEnd)
                 {
                     flag = false;
                 }
                 temp = i;
-                Departments[i - 1].Counter = Departments[i - 1].Counter + 1;
-                if (!Departments[i].TypeOfTheRule)
+                departments[i - 1].Counter = departments[i - 1].Counter + 1;
+                if (!departments[i - 1].IsConditionalRule)
                 {
-                    Stamps.Remove(Departments[i - 1].FirstStampCrossed);
-                    if (!Stamps.Contains(Departments[i - 1].FirstStamp))
+                    Stamps.Remove(departments[i - 1].FirstStampCrossed);
+                    if (!Stamps.Contains(departments[i - 1].FirstStamp))
                     {
-                        Stamps.Add(Departments[i - 1].FirstStamp);
+                        Stamps.Add(departments[i - 1].FirstStamp);
                     }
-                    i = Departments[i - 1].FirstNextDepartmentIdentificator;
+                    i = departments[i - 1].FirstNextDepartmentIdentificator;
                 } else
                 {
-                    if (Stamps.Contains(Departments[i - 1].Conditional))
+                    
+                    if (Stamps.Contains(departments[i - 1].Conditional))
                     {
-                        Stamps.Remove(Departments[i - 1].FirstStampCrossed);
-                        if (!Stamps.Contains(Departments[i - 1].FirstStamp))
+                        Console.WriteLine("fjfjfj");
+                        Stamps.Remove(departments[i - 1].FirstStampCrossed);
+                        if (!Stamps.Contains(departments[i - 1].FirstStamp))
                         {
-                            Stamps.Add(Departments[i - 1].FirstStamp);
+                            Stamps.Add(departments[i - 1].FirstStamp);
                         }
-                        i = Departments[i - 1].FirstNextDepartmentIdentificator;
+                        i = departments[i - 1].FirstNextDepartmentIdentificator;
                     } else
                     {
-                        Stamps.Remove(Departments[i - 1].SecondStampCrossed);
-                        if (!Stamps.Contains(Departments[i - 1].SecondStamp))
+                        Stamps.Remove(departments[i - 1].SecondStampCrossed);
+                        if (!Stamps.Contains(departments[i - 1].SecondStamp))
                         {
-                            Stamps.Add(Departments[i - 1].SecondStamp);
+                            Stamps.Add(departments[i - 1].SecondStamp);
                         }
-                        i = Departments[i - 1].SecondNextDepartmentIdentificator;
+                        i = departments[i - 1].SecondNextDepartmentIdentificator;
                     }
                 }
-                ////////////////////////////
-                // Console.WriteLine(Departments[temp].Counter);
-                if (Departments[temp].Counter > 1)
+
+                if (departments[temp - 1].Counter > 1)
                 {
                     if (previousConditions.ContainsKey(temp))
                     {
                         List<List<int>> list;
                         previousConditions.TryGetValue(temp, out list);
 
-                        //          Console.WriteLine(list.Count + "fjfjfj");
                         foreach (List<int> x in list)
                         {
 
                             if (Equal(x, Stamps))
                             {
                                 flag = false;
+                                resultsStamps.Add(new List<int> { -1 });
+                                if (resultsStamps.Count == 1)
+                                {
+                                    resultsStamps.Add(new List<int> { -2 });
+                                }
                             }
 
                         }
@@ -96,15 +115,16 @@ namespace StateOfStamps
                 }
                 if (identificator == temp)
                 {
+                    List<int> list = new List<int>();
                     foreach (int z in Stamps)
                     {
-                        Console.Write(z + " ");
+                        list.Add(z);
                     }
-                    Console.WriteLine();
+                    resultsStamps.Add(list);
                 }
 
             }
-
+            return resultsStamps;
             
 
         }
@@ -125,110 +145,30 @@ namespace StateOfStamps
             return true;
         }
 
-     /*   private void FillConfiguration()
+     
+        private void sort(Department[] departments)
         {
-            Console.Write("Number of departments: ");
-            NumberOfDepartments = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Number of Stamps: ");
-            NumberOfStamps = Convert.ToInt32(Console.ReadLine());
-            Departments = new Department[NumberOfDepartments];
-
-            bool isBeginExist = false;
-            bool isEndExist = false;
-            bool isConditional;
-            bool isBegin = false;
-            bool isEnd = false;
-            int FirstNextDepartment = 0;
-            int FirstStamp = 0;
-            int FirstStampCrossed = 0;
-            int SecondStamp = 0;
-            int SecondStampCrossed = 0;
-            int SecondNextDepartment = 0;
-            int ConditionalStamp = 0;
-            int identificator = 0;
-
-            for (int i = 0; i < NumberOfDepartments; i++)
+            for (int i = 0; i < departments.Length; i++)
             {
-                Console.Write("Indeficator of department: ");
-                identificator = Convert.ToInt32(Console.ReadLine());
-
-                if (!isBeginExist)
+                if (departments[i].Identificator != i + 1)
                 {
-                    Console.Write("Is this first department (true/false): ");
-                    isBegin = Convert.ToBoolean(Console.ReadLine());
-                    if (isBegin)
+                    try
                     {
-                        isBeginExist = true;
+                        Department temp = departments[departments[i].Identificator - 1];
+                    
+                    departments[departments[i].Identificator - 1] = departments[i];
+                    departments[i] = temp;
                     }
-                }
-
-                if (!isEndExist)
+                    catch
                     {
-                        Console.Write("Is this last department (true/false): ");
-                        isEnd = Convert.ToBoolean(Console.ReadLine());
-                        if (isEnd)
-                        {
-                            isEndExist = true;
-                        }
+                        Console.WriteLine("Invalid data entered");
+                        throw  new IndexOutOfRangeException();
                     }
 
-                Console.Write("Rule type (conditional - 1, unconditional - 2): ");
-                int number = Convert.ToInt32(Console.ReadLine());
-                if (number == 1)
-                {
-                    isConditional = true;
-                } else
-                {
-                    isConditional = false;
+                    i--;
                 }
-
-                if (!isConditional)
-                {
-                    Console.Write($"Delivered stamp identificator (1..{NumberOfStamps}): ");
-                    FirstStamp = Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Identifier of the seal to be crossed out (1..{NumberOfStamps}): ");
-                    FirstStampCrossed = Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Identifier of the next department (1..{NumberOfDepartments}): ");
-                    FirstNextDepartment = Convert.ToInt32(Console.ReadLine());
-                } else
-                {
-                    Console.Write($"Conditional stamp identificator (1..{NumberOfStamps}): ");
-                    ConditionalStamp =  Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Delivered stamp identificator (1..{NumberOfStamps} if conditional true): ");
-                    FirstStamp = Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Identifier of the seal to be crossed out (1..{NumberOfStamps} if conditional true): $");
-                    FirstStampCrossed = Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Identifier of the next department (1..{NumberOfDepartments} if conditional true): $");
-                    FirstNextDepartment = Convert.ToInt32(Console.ReadLine());
-
-                    Console.Write($"Delivered stamp identificator (1..{NumberOfStamps} if conditional false): ");
-                    SecondStamp = Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Identifier of the seal to be crossed out (1..{NumberOfStamps} if conditional false): ");
-                    SecondStampCrossed = Convert.ToInt32(Console.ReadLine());
-                    Console.Write($"Identifier of the next department (1..{NumberOfDepartments} if conditional false): ");
-                    SecondNextDepartment = Convert.ToInt32(Console.ReadLine());
-                }
-
-                Department department = new Department();
-                department.TypeOfTheRule = isConditional;
-                department.Identificator = identificator;
-                department.isBegin = isBegin;
-                department.isEnd = isEnd;
-                department.FirstNextDepartmentIdentificator = FirstNextDepartment;
-                department.FirstStamp = FirstStamp;
-                department.FirstStampCrossed = FirstStampCrossed;
-
-                if (isConditional)
-                {
-                    department.Conditional = ConditionalStamp;
-                    department.SecondNextDepartmentIdentificator = SecondNextDepartment;
-                    department.SecondStamp = SecondStamp;
-                    department.SecondStampCrossed = SecondStampCrossed;
-                }
-                department.Counter = 0;
-                Departments[department.Identificator - 1] = department;
-                Console.WriteLine();
             }
-        }*/
+        }
+
     }
 }
